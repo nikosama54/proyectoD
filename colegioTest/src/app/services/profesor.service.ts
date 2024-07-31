@@ -6,15 +6,15 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class EstudianteService {
-  private apiUrl = `${environment.apiBaseUrl}/estudiantes`;
+export class ProfesorService {
+  private apiUrl = `${environment.apiBaseUrl}/profesores`;
   constructor(private http: HttpClient) {}
 
-  getEstudiantes(): Observable<any> {
+  getProfesores(): Observable<any> {
     return this.http.get<any>(this.apiUrl);
   }
 
-  createEstudiante(estudiante: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, estudiante);
+  createProfesor(profesor: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, profesor);
   }
 }

@@ -32,7 +32,7 @@
 <!-- Formulario profesor-->
 <form
   [formGroup]="formProfesor"
-  (ngSubmit)="addItem('profesor')"
+  (ngSubmit)="handlerCreateProfesor()"
   *ngIf="activeProfesor"
 >
   <label for="curso">Nombre:</label>
@@ -46,12 +46,16 @@
   </button>
 </form>
 <!-- Formulario curso-->
-<form [formGroup]="formCurso" (ngSubmit)="addItem('curso')" *ngIf="activeCurso">
+<form
+  [formGroup]="formCurso"
+  (ngSubmit)="handlerCreateCurso()"
+  *ngIf="activeCurso"
+>
   <label for="curso">Nombre del curso:</label>
   <input id="curso" formControlName="nombre" />
 
-  <label for="estudiantes">año del curso:</label>
-  <input id="estudiantes" formControlName="año" />
+  <label for="año">año del curso:</label>
+  <input id="año" formControlName="anio" />
 
   <button type="submit">
     {{ editingIndex !== null ? "Actualizar" : "Agregar" }}
@@ -61,35 +65,57 @@
 <!-- Formulario Estudiante-->
 <form
   [formGroup]="formEstudiante"
-  (ngSubmit)="addItem('estudiante')"
+  (ngSubmit)="handlerCreateEstudiante()"
   *ngIf="activeEstudiante"
 >
-  <label for="curso">Nombre:</label>
-  <input id="curso" formControlName="nombre" />
-  <label for="estudiantes">Apellido:</label>
-  <input id="estudiantes" formControlName="apellido" />
-  <label for="estudiantes">curso:</label>
-  <input id="estudiantes" formControlName="curso" />
+  <div style="display: flex; flex-direction: column; gap: 3px; margin: 20px">
+    <label for="curso">Nombre:</label>
+    <input id="curso" formControlName="nombre" />
+    <label for="estudiantes">Apellido:</label>
+    <input id="estudiantes" formControlName="apellido" />
+    <label for="curso">Curso:</label>
+    <select id="curso" formControlName="curso_id">
+      <option>Seleccione...</option>
+      <option *ngFor="let item of cursos" [value]="item.id">
+        {{ item.nombre }} - {{ item.anio }}
+      </option>
+    </select>
 
-  <button type="submit">
-    {{ editingIndex !== null ? "Actualizar" : "Agregar" }}
-  </button>
+    <button type="submit">
+      {{ editingIndex !== null ? "Actualizar" : "Agregar" }}
+    </button>
+  </div>
 </form>
 <!-- Formulario Materias-->
 <form
   [formGroup]="formMateria"
-  (ngSubmit)="addItem('materia')"
+  (ngSubmit)="handlerCreateMateria()"
   *ngIf="activeMateria"
 >
-  <label for="curso">Nombre de la materia:</label>
-  <input id="curso" formControlName="curso" />
+  <div style="display: flex; flex-direction: column; gap: 3px; margin: 20px">
+    <label for="nombre">Nombre de la materia:</label>
+    <input id="nombre" formControlName="nombre" />
 
-  <label for="estudiantes">Profesores disponibles:</label>
-  <input id="estudiantes" formControlName="profesor" />
+    <label for="curso">Curso:</label>
+    <select id="curso" formControlName="curso_id">
+      <option>Seleccione...</option>
+      <option *ngFor="let item of cursos" [value]="item.id">
+        {{ item.nombre }} - {{ item.anio }}
+      </option>
+    </select>
 
-  <button type="submit">
-    {{ editingIndex !== null ? "Actualizar" : "Agregar" }}
-  </button>
+    <label for="profesor">Profesor:</label>
+    <select id="profesor" formControlName="profesor_id">
+      <option>Seleccione...</option>
+      <option *ngFor="let item of profesores" [value]="item.id">
+        {{ item.nombre }} - {{ item.apellido }}
+      </option>
+    </select>
+
+    <button type="submit">
+      {{ editingIndex !== null ? "Actualizar" : "Agregar" }}
+    </button>
+  </div>
 </form>
 <!-- Formulario notas-->
 <form [formGroup]="form" (ngSubmit)="addItem('nota')" *ngIf="activeNotas">

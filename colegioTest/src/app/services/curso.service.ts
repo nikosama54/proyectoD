@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environment';
 
-interface Curso {
+export interface Curso {
   id?: number;
   nombre: string;
   descripcion: string;
@@ -21,19 +21,7 @@ export class CursoService {
     return this.http.get<Curso[]>(this.apiUrl);
   }
 
-  getCurso(id: number): Observable<Curso> {
-    return this.http.get<Curso>(`${this.apiUrl}/${id}`);
-  }
-
-  createCurso(curso: Curso): Observable<Curso> {
-    return this.http.post<Curso>(this.apiUrl, curso);
-  }
-
-  updateCurso(id: number, curso: Curso): Observable<Curso> {
-    return this.http.put<Curso>(`${this.apiUrl}/${id}`, curso);
-  }
-
-  deleteCurso(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  createCurso(curso: Curso): Observable<Curso[]> {
+    return this.http.post<Curso[]>(this.apiUrl, curso);
   }
 }

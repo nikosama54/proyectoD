@@ -13,6 +13,8 @@ import {
 } from '@angular/forms';
 import { CursoService } from '../services/curso.service';
 import { EstudianteService } from '../services/estudiante.service';
+import { ProfesorService } from '../services/profesor.service';
+import { MateriaService } from '../services/materia.service';
 
 interface Item {
   nombre: string;
@@ -64,7 +66,9 @@ export class HomeComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private cursoService: CursoService,
-    private estudianteService: EstudianteService
+    private estudianteService: EstudianteService,
+    private profesorService: ProfesorService,
+    private materiaService: MateriaService
   ) {
     this.form = this.fb.group({
       curso: ['', Validators.required],
@@ -80,21 +84,25 @@ export class HomeComponent implements OnInit {
     });
     this.formCurso = this.fb.group({
       nombre: ['', Validators.required],
-      año: ['', [Validators.required]],
+      anio: ['', [Validators.required]],
     });
     this.formEstudiante = this.fb.group({
       nombre: ['', Validators.required],
       apellido: ['', [Validators.required]],
-      curso: ['', [Validators.required]],
+      curso_id: [null, [Validators.required]],
     });
     this.formMateria = this.fb.group({
-      curso: ['', Validators.required],
-      profesor: ['', [Validators.required]],
+      nombre: ['', Validators.required],
+      curso_id: ['', Validators.required],
+      profesor_id: ['', [Validators.required]],
     });
   }
 
   cursos: any[] = [];
   estudiantes: any[] = [];
+  profesores: any[] = [];
+  materias: any[] = [];
+  notas: any[] = [];
   ngOnInit() {
     this.items = [
       {
@@ -118,11 +126,12 @@ export class HomeComponent implements OnInit {
     ];
     this.cursoService.getCursos().subscribe((data) => {
       this.cursos = data;
-      console.log(this.cursos);
     });
     this.estudianteService.getEstudiantes().subscribe((data) => {
       this.estudiantes = data;
-      console.log(this.cursos);
+    });
+    this.profesorService.getProfesores().subscribe((data) => {
+      this.profesores = data;
     });
   }
   activeFormButton(type: string) {
@@ -185,6 +194,47 @@ export class HomeComponent implements OnInit {
         break;
     }
   }
+
+  handlerCreateCurso() {
+    if (this.formCurso.valid) {
+      this.cursoService.createCurso(this.formCurso.value).subscribe((data) => {
+        this.cursos = data;
+      });
+    }
+  }
+
+  handlerCreateProfesor() {
+    if (this.formProfesor.valid) {
+      this.profesorService
+        .createProfesor(this.formProfesor.value)
+        .subscribe((data) => {
+          this.profesores = data;
+        });
+    }
+  }
+
+  handlerCreateEstudiante() {
+    if (this.formEstudiante.valid) {
+      const formValue = this.formEstudiante.value;
+      formValue.curso_id = +formValue.curso;
+
+      this.estudianteService.createEstudiante(formValue).subscribe((data) => {
+        this.estudiantes = data;
+      });
+    }
+  }
+
+  handlerCreateMateria() {
+    if (this.formMateria.valid) {
+      const formValue = this.formMateria.value;
+      formValue.curso_id = +formValue.curso_id;
+      formValue.profesor_id = +formValue.profesor_id;
+      this.materiaService.createMateria(formValue).subscribe((data) => {
+        this.materias = data;
+      });
+    }
+  }
+
   addItem(type: string) {
     switch (type) {
       case 'profesor':
