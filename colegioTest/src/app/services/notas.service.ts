@@ -7,26 +7,22 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class NotasService {
-  private apiUrl = `${environment.apiBaseUrl}/estudiantes`;
+  private apiUrl = `${environment.apiBaseUrl}/notas`;
   constructor(private http: HttpClient) {}
 
-  getEstudiantes(): Observable<any> {
+  getNotas(): Observable<any> {
     return this.http.get<any>(this.apiUrl);
   }
 
-  getEstudiante(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  createNotas(Notas: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, Notas);
   }
 
-  createEstudiante(estudiante: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, estudiante);
+  updateNotas(id: number, Notas: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, Notas);
   }
 
-  updateEstudiante(id: number, estudiante: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, estudiante);
-  }
-
-  deleteEstudiante(id: number): Observable<any> {
+  deleteNotas(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 }

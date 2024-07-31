@@ -15,10 +15,10 @@ import { CursoService } from '../services/curso.service';
 import { EstudianteService } from '../services/estudiante.service';
 import { ProfesorService } from '../services/profesor.service';
 import { MateriaService } from '../services/materia.service';
+import { NotasService } from '../services/notas.service';
 
 interface Item {
-  nombre: string;
-  apellido: string;
+  id: number;
   curso: string;
   estudiantes: string;
   materia: string;
@@ -68,14 +68,15 @@ export class HomeComponent implements OnInit {
     private cursoService: CursoService,
     private estudianteService: EstudianteService,
     private profesorService: ProfesorService,
-    private materiaService: MateriaService
+    private materiaService: MateriaService,
+    private notasService: NotasService
   ) {
     this.form = this.fb.group({
-      curso: ['', Validators.required],
-      estudiantes: ['', [Validators.required, Validators.min(0)]],
-      materia: ['', Validators.required],
+      curso: [''],
+      estudiantes: [''],
+      materia: [''],
       nota: ['', Validators.required],
-      profesor: ['', Validators.required],
+      profesor: [''],
     });
 
     this.formProfesor = this.fb.group({
@@ -102,28 +103,7 @@ export class HomeComponent implements OnInit {
   estudiantes: any[] = [];
   profesores: any[] = [];
   materias: any[] = [];
-  notas: any[] = [];
   ngOnInit() {
-    this.items = [
-      {
-        nombre: 'Roza',
-        apellido: 'Melvis',
-        curso: '10 A',
-        estudiantes: 'roza melvis cocho',
-        materia: 'Álgebra',
-        nota: 'A',
-        profesor: 'Juan Pérez',
-      },
-      {
-        nombre: 'Alma',
-        apellido: 'Marcela',
-        curso: '6 B',
-        estudiantes: 'alma marcela',
-        materia: 'Historia Universal',
-        nota: 'B+',
-        profesor: 'Ana Gómez',
-      },
-    ];
     this.cursoService.getCursos().subscribe((data) => {
       this.cursos = data;
     });
@@ -133,7 +113,30 @@ export class HomeComponent implements OnInit {
     this.profesorService.getProfesores().subscribe((data) => {
       this.profesores = data;
     });
+    this.materiaService.getMaterias().subscribe((data) => {
+      this.materias = data;
+    });
+    this.notasService.getNotas().subscribe((data) => {
+      this.refactorItem(data);
+    });
   }
+
+  refactorItem(data: any) {
+    const items: Item[] = [];
+    data.forEach((item: any) => {
+      items.push({
+        id: item.id,
+        curso: item.materia.curso.nombre,
+        estudiantes: item.estudiante.nombre + ' ' + item.estudiante.apellido,
+        materia: item.materia.nombre,
+        nota: item.nota,
+        profesor:
+          item.materia.profesor.nombre + ' ' + item.materia.profesor.apellido,
+      });
+    });
+    this.items = items;
+  }
+
   activeFormButton(type: string) {
     switch (type) {
       case 'profesor':
@@ -235,92 +238,24 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  addItem(type: string) {
-    switch (type) {
-      case 'profesor':
-        if (this.formProfesor.valid) {
-          this.dataProfesor = this.formProfesor.value;
-          const newItem: Item = this.formProfesor.value;
-          if (this.editingIndex !== null) {
-            // Editar un ítem existente
-            this.items[this.editingIndex] = newItem;
-            this.editingIndex = null;
-          } else {
-            // Agregar un nuevo ítem
-            this.items.push(newItem);
-          }
-          this.formProfesor.reset();
-        }
-
-        // Aquí puedes agregar la lógica específica para "profesor"
-        break;
-      case 'estudiante':
-        if (this.formEstudiante.valid) {
-          this.dataEstudiante = this.formEstudiante.value;
-          const newItem: Item = this.formEstudiante.value;
-          if (this.editingIndex !== null) {
-            // Editar un ítem existente
-            this.items[this.editingIndex] = newItem;
-            this.editingIndex = null;
-          } else {
-            // Agregar un nuevo ítem
-            this.items.push(newItem);
-          }
-          this.formEstudiante.reset();
-        }
-
-        // Aquí puedes agregar la lógica específica para "estudiante"
-        break;
-      case 'curso':
-        if (this.formCurso.valid) {
-          this.dataCurso = this.formCurso.value;
-          const newItem: Item = this.formCurso.value;
-          if (this.editingIndex !== null) {
-            // Editar un ítem existente
-            this.items[this.editingIndex] = newItem;
-            this.editingIndex = null;
-          } else {
-            // Agregar un nuevo ítem
-            this.items.push(newItem);
-          }
-          this.formCurso.reset();
-        }
-
-        // Aquí puedes agregar la lógica específica para "curso"
-        break;
-      case 'materia':
-        if (this.formMateria.valid) {
-          this.dataMateria = this.formMateria.value;
-          const newItem: Item = this.formMateria.value;
-          if (this.editingIndex !== null) {
-            // Editar un ítem existente
-            this.items[this.editingIndex] = newItem;
-            this.editingIndex = null;
-          } else {
-            // Agregar un nuevo ítem
-            this.items.push(newItem);
-          }
-          this.formMateria.reset();
-        }
-
-        // Aquí puedes agregar la lógica específica para "materia"
-        break;
-      default:
-        console.log('Campo no reconocido');
-        // Aquí puedes manejar cualquier valor inesperado
-        break;
-    }
+  handlerCreateNotas() {
     if (this.form.valid) {
-      const newItem: Item = this.form.value;
       if (this.editingIndex !== null) {
-        // Editar un ítem existente
-        this.items[this.editingIndex] = newItem;
-        this.editingIndex = null;
+        this.notasService
+          .updateNotas(this.editingIndex, this.form.value)
+          .subscribe((data) => {
+            this.refactorItem(data);
+          });
       } else {
-        // Agregar un nuevo ítem
-        this.items.push(newItem);
+        const formValue = this.form.value;
+        formValue.curso_id = +formValue.curso;
+        formValue.profesor_id = +formValue.profesor;
+        formValue.estudiante_id = +formValue.estudiantes;
+        formValue.materia_id = +formValue.materia;
+        this.notasService.createNotas(formValue).subscribe((data) => {
+          this.refactorItem(data);
+        });
       }
-      this.form.reset();
     }
   }
 
@@ -330,6 +265,8 @@ export class HomeComponent implements OnInit {
   }
 
   deleteItem(index: number) {
-    this.items.splice(index, 1);
+    this.notasService.deleteNotas(index).subscribe((data) => {
+      this.refactorItem(data);
+    });
   }
 }

@@ -118,7 +118,7 @@
   </div>
 </form>
 <!-- Formulario notas-->
-<form [formGroup]="form" (ngSubmit)="addItem('nota')" *ngIf="activeNotas">
+<form [formGroup]="form" (ngSubmit)="handlerCreateNotas()" *ngIf="activeNotas">
   <mat-form-field>
     <mat-label for="cursos">Curso:</mat-label>
     <select matNativeControl id="curso" formControlName="curso" required>
@@ -177,17 +177,17 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of items; let i = index">
+      <tr *ngFor="let item of items">
         <td>{{ item.curso }}</td>
         <td>{{ item.estudiantes }}</td>
         <td>{{ item.materia }}</td>
         <td>{{ item.nota }}</td>
-        <td>{{ item.nombre + " " + item.apellido }}</td>
+        <td>{{ item.profesor }}</td>
         <td>
-          <button (click)="editItem(i)">Editar</button>
+          <button (click)="editItem(item.id)">Editar</button>
         </td>
         <td>
-          <button (click)="deleteItem(i)">Eliminar</button>
+          <button (click)="deleteItem(item.id)">Eliminar</button>
         </td>
       </tr>
     </tbody>
