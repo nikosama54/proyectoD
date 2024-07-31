@@ -1,64 +1,87 @@
 <div class="containerTitle">
-    <mat-card appearance="outlined" class="cardSize">
-        <mat-card-header>
-          <mat-card-title> Colegio la Presentacion</mat-card-title>
-          <mat-card-subtitle>por un futuro mejor</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-actions>
-          <button mat-button>Añadir estudiante</button>
-        </mat-card-actions>
-    </mat-card>
+  <mat-card appearance="outlined" class="cardSize">
+    <mat-card-header>
+      <mat-card-title> Colegio la Presentacion</mat-card-title>
+      <mat-card-subtitle>por un futuro mejor</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-actions>
+      <button mat-button>Añadir estudiante</button>
+    </mat-card-actions>
+  </mat-card>
 </div>
 <!-- Formulario -->
 <form [formGroup]="form" (ngSubmit)="addItem()">
-    <label for="curso">Curso:</label>
-    <input id="curso" formControlName="curso" />
-  
-    <label for="estudiantes">Estudiante:</label>
-    <input id="estudiantes" formControlName="estudiantes" type="number" />
-  
-    <label for="materia">Materia:</label>
-    <input id="materia" formControlName="materia" />
-  
-    <label for="nota">Nota:</label>
-    <input id="nota" formControlName="nota" />
-  
-    <label for="profesor">Profesor:</label>
-    <input id="profesor" formControlName="profesor" />
-  
-    <button type="submit">{{ editingIndex !== null ? 'Actualizar' : 'Agregar' }}</button>
-  </form>
-  
-  <!-- Tabla -->
-  <div class="table-container">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Curso</th>
-          <th>Estudiantes</th>
-          <th>Materia</th>
-          <th>Nota</th>
-          <th>Profesor</th>
-          <th>Editar</th>
-          <th>Eliminar</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of items; let i = index">
-          <td>{{ item.curso }}</td>
-          <td>{{ item.estudiantes }}</td>
-          <td>{{ item.materia }}</td>
-          <td>{{ item.nota }}</td>
-          <td>{{ item.profesor }}</td>
-          <td>
-            <button (click)="editItem(i)">Editar</button>
-          </td>
-          <td>
-            <button (click)="deleteItem(i)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
-  
+  <mat-form-field>
+    <mat-label for="cursos">Curso:</mat-label>
+    <select matNativeControl id="curso" formControlName="curso" required>
+      <option *ngFor="let item of cursos" value="volvo">
+        {{ item.nombre }} - {{ item.anio }}
+      </option>
+    </select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label for="estudiantes">Estudiante:</mat-label>
+    <select
+      matNativeControl
+      id="estudiantes"
+      formControlName="estudiantes"
+      required
+    >
+      <option *ngFor="let item of estudiantes" [value]="item.id">
+        {{ item.nombre }} {{ item.apellido }}
+      </option>
+    </select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label for="materia">Materia:</mat-label>
+    <select matNativeControl id="materia" formControlName="materia" required>
+      <option *ngFor="let item of estudiantes" [value]="item.id">
+        {{ item.nombre }} {{ item.apellido }}
+      </option>
+    </select>
+  </mat-form-field>
+
+  <label for="nota">Nota:</label>
+  <input id="nota" formControlName="nota" />
+
+  <label for="profesor">Profesor:</label>
+  <input id="profesor" formControlName="profesor" />
+
+  <button type="submit">
+    {{ editingIndex !== null ? "Actualizar" : "Agregar" }}
+  </button>
+</form>
+
+<!-- Tabla -->
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Curso</th>
+        <th>Estudiantes</th>
+        <th>Materia</th>
+        <th>Nota</th>
+        <th>Profesor</th>
+        <th>Editar</th>
+        <th>Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items; let i = index">
+        <td>{{ item.curso }}</td>
+        <td>{{ item.estudiantes }}</td>
+        <td>{{ item.materia }}</td>
+        <td>{{ item.nota }}</td>
+        <td>{{ item.profesor }}</td>
+        <td>
+          <button (click)="editItem(i)">Editar</button>
+        </td>
+        <td>
+          <button (click)="deleteItem(i)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
