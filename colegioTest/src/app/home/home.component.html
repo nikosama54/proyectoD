@@ -9,14 +9,12 @@
         </mat-card-actions>
     </mat-card>
 </div>
-
-<!-- tabla.component.html -->
 <!-- Formulario -->
 <form [formGroup]="form" (ngSubmit)="addItem()">
     <label for="curso">Curso:</label>
     <input id="curso" formControlName="curso" />
   
-    <label for="estudiantes">Estudiantes:</label>
+    <label for="estudiantes">Estudiante:</label>
     <input id="estudiantes" formControlName="estudiantes" type="number" />
   
     <label for="materia">Materia:</label>
