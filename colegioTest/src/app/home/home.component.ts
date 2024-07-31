@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 interface Item {
   curso: string;
-  estudiantes: number;
+  estudiantes: string;
   materia: string;
   nota: string;
   profesor: string;
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       curso: ['', Validators.required],
-      estudiantes: [0, [Validators.required, Validators.min(0)]],
+      estudiantes: ['', [Validators.required, Validators.min(0)]],
       materia: ['', Validators.required],
       nota: ['', Validators.required],
       profesor: ['', Validators.required]
@@ -36,8 +36,8 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     // Carga datos iniciales si es necesario
     this.items = [
-      { curso: 'Matemáticas', estudiantes: 30, materia: 'Álgebra', nota: 'A', profesor: 'Juan Pérez' },
-      { curso: 'Historia', estudiantes: 25, materia: 'Historia Universal', nota: 'B+', profesor: 'Ana Gómez' }
+      { curso: '10 A', estudiantes: "roza melvis cocho", materia: 'Álgebra', nota: 'A', profesor: 'Juan Pérez' },
+      { curso: '6 B', estudiantes: "alma marcela", materia: 'Historia Universal', nota: 'B+', profesor: 'Ana Gómez' }
     ];
   }
 
