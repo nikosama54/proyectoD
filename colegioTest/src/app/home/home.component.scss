@@ -1,0 +1,49 @@
+.containerTitle{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.cardSize{
+  width: 60em;
+  margin: 0px 15px;
+}
+
+
+/* tabla.component.css */
+.table-container {
+    margin: 20px;
+  }
+  
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .data-table th, .data-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .data-table th {
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  
+  .data-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .data-table button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .data-table button:hover {
+    background-color: #0056b3;
+  }
+  
