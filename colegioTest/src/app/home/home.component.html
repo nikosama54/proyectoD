@@ -5,12 +5,58 @@
           <mat-card-subtitle>por un futuro mejor</mat-card-subtitle>
         </mat-card-header>
         <mat-card-actions>
-          <button mat-button>Añadir estudiante</button>
+          <button (click)="activeFormButton('profesor')" mat-button>Añadir un profesor</button>
+          <button (click)="activeFormButton('curso')" mat-button>Añadir un curso</button>
+          <button (click)="activeFormButton('estudiante')" mat-button>Añadir un estudiante</button>
+          <button (click)="activeFormButton('materia')" mat-button>Añadir un materia</button>
+          
         </mat-card-actions>
     </mat-card>
 </div>
-<!-- Formulario -->
-<form [formGroup]="form" (ngSubmit)="addItem()">
+<!-- Formulario profesor-->
+<form [formGroup]="formProfesor" (ngSubmit)="addItem('profesor')" *ngIf="activeProfesor">
+    <label for="curso">Nombre:</label>
+    <input id="curso" formControlName="nombre" />
+  
+    <label for="estudiantes">Apellido:</label>
+    <input id="estudiantes" formControlName="apellido"/>  
+  
+    <button type="submit">{{ editingIndex !== null ? 'Actualizar' : 'Agregar' }}</button>
+  </form>
+  <!-- Formulario curso-->
+<form [formGroup]="formCurso" (ngSubmit)="addItem('curso')" *ngIf="activeCurso">
+    <label for="curso">Nombre del curso:</label>
+    <input id="curso" formControlName="nombre" />
+  
+    <label for="estudiantes">año del curso:</label>
+    <input id="estudiantes" formControlName="año"/>  
+  
+    <button type="submit">{{ editingIndex !== null ? 'Actualizar' : 'Agregar' }}</button>
+  </form>
+ 
+  <!-- Formulario Estudiante-->
+<form [formGroup]="formEstudiante" (ngSubmit)="addItem('estudiante')" *ngIf="activeEstudiante">
+    <label for="curso">Nombre:</label>
+    <input id="curso" formControlName="nombre" />  
+    <label for="estudiantes">Apellido:</label>
+    <input id="estudiantes" formControlName="apellido"/>  
+    <label for="estudiantes">curso:</label>
+    <input id="estudiantes" formControlName="curso"/> 
+  
+    <button type="submit">{{ editingIndex !== null ? 'Actualizar' : 'Agregar' }}</button>
+  </form>
+  <!-- Formulario Materias-->
+<form [formGroup]="formMateria" (ngSubmit)="addItem('materia')" *ngIf="activeMateria">
+    <label for="curso">Nombre de la materia:</label>
+    <input id="curso" formControlName="curso" />
+  
+    <label for="estudiantes">Profesores disponibles:</label>
+    <input id="estudiantes" formControlName="profesor"/>  
+  
+    <button type="submit">{{ editingIndex !== null ? 'Actualizar' : 'Agregar' }}</button>
+  </form>
+<!-- Formulario notas-->
+<form [formGroup]="form" (ngSubmit)="addItem('nota')" *ngIf="activeNotas">
     <label for="curso">Curso:</label>
     <input id="curso" formControlName="curso" />
   
@@ -49,7 +95,7 @@
           <td>{{ item.estudiantes }}</td>
           <td>{{ item.materia }}</td>
           <td>{{ item.nota }}</td>
-          <td>{{ item.profesor }}</td>
+          <td>{{ item.nombre + ' ' + item.apellido}}</td>
           <td>
             <button (click)="editItem(i)">Editar</button>
           </td>
